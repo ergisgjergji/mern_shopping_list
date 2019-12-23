@@ -1,0 +1,25 @@
+{
+  "name": "mern_shopping_list",
+  "version": "1.0.0",
+  "description": "A simple shopping list using MERN stack.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ergisgjergji/mern_shopping_list.git"
+  },
+  "keywords": [
+    "MERN",
+    "nodejs",
+    "reactjs",
+    "mongodb"
+  ],
+  "author": "Ergis Gjergji",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ergisgjergji/mern_shopping_list/issues"
+  },
+  "homepage": "https://github.com/ergisgjergji/mern_shopping_list#readme"
+}
