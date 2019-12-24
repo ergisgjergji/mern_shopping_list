@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const config = require('config');
 
 const app = express();
 
@@ -8,16 +9,17 @@ const app = express();
 app.use(bodyParser.json());
 
 // DB config
-const db = require('./config/keys').mongoURI;
+const db = config.get('mongoURI');
 
-mongoose.connect(db, { useNewUrlParser: true })
+mongoose.connect(db, { useNewUrlParser: true , useCreateIndex: true })
     .then(res => console.log('Database connection - SUCCESS!'))
     .catch(err => console.log('Database connection - FAIL!'));
 
     
 // Routes
-const items = require('./routes/api/item');
-app.use('/api/items', items);
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/items', require('./routes/api/items'));
 
 const port = process.env.PORT || 5000;
 
