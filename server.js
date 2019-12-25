@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // DB config
 const db = config.get('mongoURI');
 
-mongoose.connect(db, { useNewUrlParser: true , useCreateIndex: true })
+mongoose.connect(db, { useNewUrlParser: true , useCreateIndex: true , useUnifiedTopology: true })
     .then(res => console.log('Database connection - SUCCESS!'))
     .catch(err => console.log('Database connection - FAIL!'));
 

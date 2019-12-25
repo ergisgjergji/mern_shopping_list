@@ -23,8 +23,8 @@ class ShoppingList extends Component {
     }
 
     render() {
-        const { items } = this.props.itemReducer;
-        const { isLoading } = this.props.itemReducer;
+        const { items, isLoading } = this.props.itemReducer;
+        const { isAuthenticated } = this.props; 
 
         return (
             <Container>
@@ -41,11 +41,14 @@ class ShoppingList extends Component {
                                 items.map( ({_id, name}) => (
                                     <CSSTransition key={_id} timeout={500} classNames="fade">
                                         <ListGroupItem>
-                                            <Button 
-                                                className="remove-btn mr-2" color="danger" size="sm" 
-                                                onClick={this.onDeleteItem.bind(this, _id)}>
-                                                &times;
-                                            </Button>
+                                            {
+                                                isAuthenticated ? 
+                                                    <Button 
+                                                        className="remove-btn mr-2" color="danger" size="sm" 
+                                                        onClick={this.onDeleteItem.bind(this, _id)}>
+                                                        &times;
+                                                    </Button> : null
+                                            }
                                             {name}
                                         </ListGroupItem>
                                     </CSSTransition>
@@ -62,11 +65,13 @@ class ShoppingList extends Component {
 
 ShoppingList.propTypes = {
     getItems: PropTypes.func.isRequired, 
-    itemReducer: PropTypes.object.isRequired
+    itemReducer: PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-    itemReducer: state.itemReducer
+    itemReducer: state.itemReducer,
+    isAuthenticated: state.authReducer.isAuthenticated
 });
 
 export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList);

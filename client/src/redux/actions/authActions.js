@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { returnErrors } from './errorActions';
-
 import { 
     USER_LOADED,
     USER_LOADING,
@@ -28,6 +27,49 @@ import {
                 type: AUTH_ERROR
             })
         });
+ }
+
+ // Register User
+ export const register = newUser => dispatch => {
+
+     axios.post('/api/users', newUser)
+        .then(res => {
+            if(res.data.status) 
+                dispatch(returnErrors(res.data.message, res.data.status, 'REGISTER_FAIL'))
+            else
+                dispatch({
+                    type: REGISTER_SUCCESS,
+                    payload: res.data
+                })
+        })
+        .catch(err => {
+            dispatch({ type: REGISTER_FAIL })
+        });
+ }
+
+// Login
+export const login = user => dispatch => {
+
+    axios.post('/api/auth', user)
+        .then(res => {
+            if(res.data.status) 
+                dispatch(returnErrors(res.data.message, res.data.status, 'LOGIN_FAIL'))
+            else
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: res.data
+                })
+        })
+        .catch(err => {
+            // dispatch({ type: LOGIN_FAIL })
+        });
+}
+
+ // Logout
+ export const logout = () => {
+    return {
+        type: LOGOUT_SUCCESS
+    };
  }
 
  // Setup config/headers and token

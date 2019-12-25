@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 
-// Item model
+// User model
 const User = require('../../models/User');
 
 // @route   GET api/users
@@ -15,14 +15,14 @@ router.post('/', (req, res) => {
 
     // Validation
     if(!name || !email || !password) {
-        return res.status(400).json({ message: 'Fields can not be empty' }); 
+        return res.json({ status: 400, message: 'All fields are required!' });
     }
 
     // Check for existing user
     User.findOne({ email })
         .then(user => {
             if(user) 
-                return res.status(400).json({ message: 'User already exists' });
+                return res.json({ status: 400, message: 'User already exists' });
             const newUser = new User({
                 name, 
                 email,

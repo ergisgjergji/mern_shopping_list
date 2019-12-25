@@ -5,7 +5,7 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const auth = require('../../middleware/auth');
 
-// Item model
+// Authorization
 const User = require('../../models/User');
 
 // @route   POST api/auth
@@ -16,20 +16,20 @@ router.post('/', (req, res) => {
 
     // Validation
     if(!email || !password) {
-        return res.status(400).json({ message: 'Fields can not be empty' }); 
+        return res.json({ status: 400, message: 'All fields are required!' }); 
     }
 
     // Check for existing user
     User.findOne({ email })
         .then(user => {
             if(!user) 
-                return res.status(400).json({ message: 'User does not exist' });
+                return res.json({ status: 400, message: 'Wrong email/password!' });
             
             // Validate password
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
                     if(!isMatch)
-                        return res.status(400).json({ message: 'Invalid credentials' });
+                        return res.json({ status: 400, message: 'Wrong email/password!' });
 
                     jwt.sign(
                         { id: user._id },
