@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb://localhost:4000/shopping_list",
+    "mongoURI": "mongodb+srv://ergis:ergisadmin@cluster0-8x5zd.mongodb.net/test?retryWrites=true&w=majority",
     "jwtSecret": "msl_ergis"
 }
