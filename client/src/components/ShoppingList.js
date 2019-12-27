@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { ClipLoader, GridLoader } from "react-spinners";
+import { FadeLoader } from "react-spinners";
+import EdiText from 'react-editext'
+
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { getItems, deleteItem } from '../redux/actions/itemActions';
+import { getItems, deleteItem, updateItem } from '../redux/actions/itemActions';
 
 const override = `
   display: block;
@@ -22,6 +24,11 @@ class ShoppingList extends Component {
         this.props.deleteItem(id);
     }
 
+    onUpdate = (id, val) => {
+        const updatedItem = { id, name: val };
+        this.props.updateItem(updatedItem);
+    }
+
     render() {
         const { items, isLoading } = this.props.itemReducer;
         const { isAuthenticated } = this.props; 
@@ -31,7 +38,7 @@ class ShoppingList extends Component {
                 <ListGroup>
                     {
                         isLoading ?
-                            <GridLoader
+                            <FadeLoader
                                 css={override}
                                 size={10}
                                 loading={isLoading}/>
@@ -43,13 +50,29 @@ class ShoppingList extends Component {
                                         <ListGroupItem>
                                             {
                                                 isAuthenticated ? 
-                                                    <Button 
-                                                        className="remove-btn mr-2" color="danger" size="sm" 
-                                                        onClick={this.onDeleteItem.bind(this, _id)}>
-                                                        &times;
-                                                    </Button> : null
+                                                    <>
+                                                        <Button 
+                                                            className="remove-btn mr-2" color="danger" size="sm" 
+                                                            onClick={this.onDeleteItem.bind(this, _id)}>
+                                                            &times;
+                                                        </Button>
+                                                        <div className="d-inline-block mt-1 ml-2 shadow p-2 bg-dark text-white rounded">
+                                                            <EdiText
+                                                                type="text"
+                                                                value={name}
+                                                                hideIcons={true}
+                                                                saveButtonClassName="textfield-save"
+                                                                editButtonClassName="textfield-edit"
+                                                                cancelButtonClassName="textfield-cancel"
+                                                                validationMessage="Please type at least 3 characters."
+                                                                validation={val => val.length >= 3}
+                                                                editOnViewClick={true}
+                                                                onSave={this.onUpdate.bind(this, _id)}
+                                                                submitOnEnter
+                                                            />
+                                                        </div>
+                                                    </> : name
                                             }
-                                            {name}
                                         </ListGroupItem>
                                     </CSSTransition>
                                 ))
@@ -74,4 +97,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.authReducer.isAuthenticated
 });
 
-export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList);
+export default connect(mapStateToProps, { getItems, deleteItem, updateItem })(ShoppingList);

@@ -34,4 +34,16 @@ router.delete('/:id', auth, (req, res) => {
         .catch(err => res.status(404).json({ success: false }));
 });
 
+// @route   PUT api/items/:id
+// @desc    Modify an item
+// @access  Private
+router.put('/:id', auth, (req, res) => {
+    const filter = { _id: req.params.id };
+    const updateField = { name: req.body.name };
+
+    Item.findOneAndUpdate(filter, updateField, { new: true })
+        .then(item => res.json(item))
+        .catch(err => res.status(404).json({ success: false }));
+});
+
 module.exports = router;
